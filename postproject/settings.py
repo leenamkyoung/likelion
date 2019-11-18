@@ -25,8 +25,23 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1r87s#1!9xdj%4y%i@o@w7p==+&a(n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
+from boto.s3.connection import S3Connection
+
+# s3 = S3Connection(os.environ['S3_KEY'], os.environ['S3_SECRET'])
+
+AWS_STORAGE_BUCKET_NAME = 'likelion.test.bucket'
+
+AWS_S3_REGION_NAME = "ap-northeast-2"
+
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
 ALLOWED_HOSTS = ['*']
 
+DEFAULT_FILE_STORAGE = 'postproject.storages.MediaStorage'
+STATICFILES_STORAGE = 'postproject.storages.StaticStorage'
+
+MEDIAFILES_LOCATION = 'media'
+STATICFILES_LOCATION = 'static'
 
 # Application definition
 
@@ -39,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'postapp.apps.PostappConfig',
     'accounts.apps.AccountsConfig',
+    'storages',
 ]
 
 MIDDLEWARE = [

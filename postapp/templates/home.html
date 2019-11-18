@@ -1,34 +1,126 @@
-{% if user.is_authenticated %} <!--로그인 했을때 보이는 화면-->
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+<style>
+    .col-md-4{
+        float: right;
+    }
+    .wrap {
+        display: flex;
+        top:0; left:0; bottom:0; right:0;
+        margin:5% auto;
+    }
+
+    .button-css{
+        width: 120px;
+        height: 35px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        font-weight: 500;
+        color: #000;
+        background-color: #fff;
+        border: none;
+        border-radius: 45px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease 0s;
+        cursor: pointer;
+        outline: none;  
+        margin: 0 auto;
+    }
+    .button-css:hover {
+        background-color: #2EE59D;
+        box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+        color: #fff;
+        transform: translateY(-7px);
+    }
+    .button-css>p{
+        text-align: center;
+        padding-top: 10px;
+    }
+
+</style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Container</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample07">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown07">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+      <form action="{% url 'search' %}" class="form-inline my-2 my-md-0" method="get">
+        <input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Search">
+      </form>
+    </div>
+  </div>
+</nav>
+
+{% if user.is_authenticated %} <!--로그인 했을때 보이는 화면-->
 {{ user.username }} 님
 
     <form id="logout" method="POST" action="{% url 'logout' %}">
         {% csrf_token %} 
-        <input type="submit" value="로그아웃">
+        <input type="submit" value="로그아웃">log
     </form>
 
 <a href="{% url 'new' %}">글쓰기</a>
 
+
 {% else %} <!--로그아웃 했을때 보이는 화면-->
- 로그인 해
- <a href="{% url 'signup' %}">가입하기</a>
-<a href="{% url 'login' %}">로그인</a>
+ 
+        <div class="wrap" style="text-align: center;">
+            <a href="{% url 'signup' %}" class="button-css"><p>Sing up</p></a>
+            <a href="{% url 'login' %}" class="button-css"><p>Login</p></a>
+        </div>
+
 {% endif %}
 
-<form action="{% url 'search' %}" method="get">
-  <input type="text" name="q" value="{{ q }}">
-  <input type="submit" value="검색">
-</form>
+<br>
 
-
-{% for post in posts.all %}
-        <div class="container">
-            <h1>{{ post.title }}</h1>
-            <p>작성자 : {{post.name}}</p>
-            <p>시간 : {{ post.pub_date }}</p>
-            <p>본문 : {{ post.summary }}</p>
-            <p> 좋아요 : <small class="text-muted"><span class="like_count" id="count{{ post.id }}">{{ post.total_likes }} like</span></small></p>
-            <a href="{% url 'detail' post.id %}">자세히보기</a>
+{% for post in posts.all %}  
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        <img src="{{ post.images }}" width="50%" height="50%">
+        <div class="card-body">
+          <p class="card-text">{{ post.summary }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <a href="{% url 'detail' post.id %}" class="btn btn-outline-warning">자세히보기</a></button>
+              <button type="button" class="btn btn-outline-warning">{{ post.total_likes }} like</button>
+            </div>
+            <br>
+            <small class="text-muted">작성자:{{post.name}}</small>
+          </div>
         </div>
+      </div>
+    </div>
 {% endfor %}
 
+</body>
