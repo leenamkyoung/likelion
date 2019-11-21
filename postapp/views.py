@@ -31,7 +31,7 @@ def create(request):
     post.pub_date = timezone.datetime.now()
     post.name = User.objects.get(username = request.user.get_username())
     
-    if not post.images:
+    if not request.FILES:
         post.images = ""
         post.save()
     else:
