@@ -30,8 +30,14 @@ def create(request):
     post.body = request.POST['body']
     post.pub_date = timezone.datetime.now()
     post.name = User.objects.get(username = request.user.get_username())
-    post.images = request.FILES['images']
-    post.save()
+    
+    if not post.images:
+        post.images = ""
+        post.save()
+    else:
+        post.images = request.FILES['images']
+        post.save()
+    
     return redirect('/post/' + str(post.id))
 
 def comment_write(request, post_pk):

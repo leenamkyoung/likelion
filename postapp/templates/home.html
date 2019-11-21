@@ -82,6 +82,7 @@
   </div>
 </nav>
 
+{% load humanize %}
 {% if user.is_authenticated %} <!--로그인 했을때 보이는 화면-->
 {{ user.username }} 님
 
@@ -117,6 +118,7 @@
             </div>
             <br>
             <small class="text-muted">작성자:{{post.name}}</small>
+            <small class="text-muted">시간 : {{ post.pub_date | naturaltime }}</small>
           </div>
         </div>
       </div>
